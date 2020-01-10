@@ -1,0 +1,10 @@
+Package: agro
+Type: Package
+Title: Agriculture data science helper functions
+Version: 0.1
+Date: 2019-08-08
+Author: Robert Hijmans
+Maintainer: <r.hijmans@gmail.com>
+Description: An (small and eclectic) collection of methods to support Agricultural Data Science methods. 
+License: GPL (>=3)
+
