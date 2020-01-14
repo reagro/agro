@@ -164,7 +164,7 @@ get_data_from_uri <- function(uri, path, uripath=TRUE, unzip=TRUE) {
 	}
 	zf <- grep("\\.pdf$", allzf, value=TRUE, invert=TRUE)
 	zf <- file.path(path, zf)
-	try(make_recipe(uri, zf, file.path(path, paste0(uname, ".yaml"))))
+	#try(make_recipe(uri, zf, file.path(path, paste0(uname, ".yaml"))))
 	return(zf)
 }
 
