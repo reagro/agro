@@ -5,7 +5,7 @@
 
 .getColnames <- function(filename, format) {
 	if (format == "csv") {
-		d <- read.csv(filename)
+		d <- utils::read.csv(filename)
 		return(colnames(d))
 	} else {
 		return(NULL)

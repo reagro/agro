@@ -1,10 +1,11 @@
 Package: agro
 Type: Package
 Title: Agriculture data science helper functions
-Version: 0.1
-Date: 2019-08-08
+Version: 0.2-1
+Suggests: httr, jsonlite, yaml
+Date: 2020-03-25
 Author: Robert Hijmans
 Maintainer: <r.hijmans@gmail.com>
-Description: An (small and eclectic) collection of methods to support Agricultural Data Science methods. 
+Description: An (small and eclectic) collection of methods to support agricultural data science methods. 
 License: GPL (>=3)
 

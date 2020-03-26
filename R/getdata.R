@@ -100,7 +100,7 @@ get_data_from_uri <- function(uri, path, uripath=TRUE, unzip=TRUE) {
 		#js <- httr::content(r, as = "text", encoding = "UTF-8")
 		# but for cimmyt...
 		tmpf <- tempfile()
-		download.file(uu, tmpf, quiet=TRUE)
+		utils::download.file(uu, tmpf, quiet=TRUE)
 		js <- readLines(tmpf, encoding = "UTF-8", warn=FALSE)
 		js <- jsonlite::fromJSON(js)
 		fjs <- js$data$latestVersion$files
@@ -110,7 +110,7 @@ get_data_from_uri <- function(uri, path, uripath=TRUE, unzip=TRUE) {
 		f$checksum <- NULL
 		f$tabularTags <- NULL
 		fn <- file.path(path, paste0(uname, "_files.txt"))
-		try(write.csv(f, fn))
+		try(utils::write.csv(f, fn))
 		
 		rest <- f$restricted
 		if (!is.null(rest)) {
@@ -127,20 +127,20 @@ get_data_from_uri <- function(uri, path, uripath=TRUE, unzip=TRUE) {
 		if (sum(f$originalFileSize, na.rm=TRUE) < 10000000) {
 			files <- paste0(f$id, collapse = ",")
 			fu <- paste0(protocol, domain, "/api/access/datafiles/", files, "?format=original")
-			download.file(fu, zipf, mode="wb", quiet=TRUE)
+			utils::download.file(fu, zipf, mode="wb", quiet=TRUE)
 		} else {
 			f$originalFileSize[is.na(f$originalFileSize)] <- 0
 			i <- 1
 			zipf <- NULL
 			while(TRUE) {
-				print(paste("part", i)); flush.console()
+				print(paste("part", i)); utils::flush.console()
 				cs <- cumsum(f$originalFileSize)
 				k <- which (cs < 9000000)
 				if (length(k) == 0) k <- 1
 				files <- paste0(f$id[k], collapse = ",")
 				fu <- paste0(protocol, domain, "/api/access/datafiles/", files, "?format=original")
 				zipi <- file.path(path, paste0(uname, "_", i, ".zip"))
-				download.file(fu, zipi, mode="wb", quiet=TRUE)
+				utils::download.file(fu, zipi, mode="wb", quiet=TRUE)
 				f <- f[-k,]
 				zipf <- c(zipf, zipi)
 				if (nrow(f) == 0) break
