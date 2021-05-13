@@ -2,12 +2,8 @@
 utility <- function(income, rho, scale=FALSE) {
 
 	income <- pmax(1, income)
-	
-	if (rho==1) {
-		u <- log(income)
-	} else {
-		u <- (income ^ (1 - rho)) / (1 - rho)
-	}
+	rho[rho==1] <- 0.99
+	u <- (income ^ (1 - rho)) / (1 - rho)
 	if (scale) {
 		u <- u - min(u)
 		u <- u / max(u)

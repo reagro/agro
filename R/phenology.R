@@ -5,7 +5,7 @@ plant_harvest <- function(x, min_prec=30, max_prec=90, max_len=5) {
 # must have 12 values (months)
 	stopifnot(length(x) == 12)
 # cannot have any NAs	
-	if (any(is.na(x))) return (rep(0, 12))
+	if (any(is.na(x))) return(matrix(NA, nrow=12, ncol=2))
 
 # max_len is the number of months
 	stopifnot(max_len > 0 & max_len <= 12)
