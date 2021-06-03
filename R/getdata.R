@@ -4,35 +4,6 @@
 # license GPL3
 
 
-.get_repos <- function() {
-	harv=cbind("dataverse.harvard.edu", c("AfricaRice", "IFPRI", "RiceResearch", "CIAT", "WorldFish", "ICRAF", "Bioversity", "cardresearch", "horticulture", "SIIL", "gfc"))
-	
-	harv <- cbind(harv, harv[,2])
-	harv[harv[,2]=="RiceResearch",2] <- "IRRI"
-	harv[harv[,2]=="cardresearch",2] <- "CARD"
-	harv[harv[,2]=="horticulture",2] <- "FTF_HORT"
-	harv[harv[,2]=="SIIL",2] <- "FTF_SIIL"
-	harv[harv[,2]=="gfc",2] <- "FTF_GFC"
-		
-	self <- matrix(c("data.cipotato.org", "CIP", "data.mel.cgiar.org", "ICARDA", "data.cifor.org", "CIFOR", "data.cimmyt.org", "CIMMYT", "dataverse.icrisat.org", "ICRISAT", "dataverse.cirad.fr", "CIRAD", "dataverse.ird.fr", "IRD", "data.inra.fr", "INRA"), ncol=2, byrow=TRUE)
-	self <- cbind(self, ":root")
-	
-	sch <- cbind("dataverse.scholarsportal.info", "GUELPH-AG", "ugardr")
-	
-	repos <- rbind(harv, self, sch)
-	repos <- cbind(repos, "dataverse")
-
-
-	ckan <- cbind(c("data.iita.org", "data.ilri.org"), c("IITA", "ILRI"), c("", "portal"), rep("CKAN", 2))
-	repos <- rbind(repos, ckan)
-	colnames(repos) <- c("server", "label", "root", "type")
-	repos <- data.frame(repos, stringsAsFactors=FALSE)
-	repos$api <- ifelse(repos$label %in% c("CIRAD", "INRA"), FALSE, TRUE)
-	repos$protocol <- ifelse(repos$type == "CKAN", "http://", "https://")
-	repos$protocol[repos$label == "ICRISAT"] <- "http://"
-	repos
-}
-
 .getdomain <- function(x) strsplit(gsub("http://|https://|www\\.", "", x), "/")[[c(1, 1)]]
 .getprotocol <- function(x) paste0(strsplit(x, "/")[[c(1, 1)]], "//")
 .removeprotocol <- function(x) gsub("http://|https://|www\\.", "", x)
