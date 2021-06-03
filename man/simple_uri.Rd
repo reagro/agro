@@ -1,6 +1,6 @@
-\name{get_simple_uri}
+\name{get_simple_URI}
 
-\alias{get_simple_uri}
+\alias{get_simple_URI}
 
 \title{
 Clean an URI so that it can be used as a filename
@@ -12,7 +12,7 @@ Replace "/" and ":" in an URI with "_" so that they can be used as filenames
 
 
 \usage{
-get_simple_uri(x, reverse=FALSE)
+get_simple_URI(x, reverse=FALSE)
 }
  
 \arguments{
@@ -27,9 +27,9 @@ character
 
 \examples{
 uri <- "doi:10.7910/DVN/UNLRGC"
-u <- get_simple_uri(uri)
+u <- get_simple_URI(uri)
 u
-get_simple_uri(u, reverse=TRUE)
+get_simple_URI(u, reverse=TRUE)
 }
 
 
