@@ -98,9 +98,9 @@ get_simple_URI <- function(uri, reverse=FALSE) {
 	y  <- httr::GET(uu)
 	ry <- httr::content(response, as="raw")
 	meta <- rawToChar(ry)
-	writeLines(meta, file.path(path, paste0(uname, ".json")))
-
 	js  <- jsonlite::fromJSON(meta)
+	meta <- jsonlite::toJSON(js, pretty=TRUE)
+	writeLines(meta, file.path(path, paste0(uname, ".json")))
 	d <- js$result$resources
 	
 	done <- TRUE
@@ -223,7 +223,7 @@ get_simple_URI <- function(uri, reverse=FALSE) {
 		}
 	}
 	writeLines("ok", file.path(path, "ok.txt"))
-	return(files)
+	file.path(path, files)
 }
 
 
@@ -234,9 +234,9 @@ get_data_from_uri <- function(uri, path, overwrite=FALSE, uripath=TRUE, unzip=TR
 
 	#ckan 
 	if (!(overwrite) && (file.exists(file.path(path, "ok.txt")))) {
-		ff <- list.files(path)
+		ff <- list.files(path, full.names=TRUE)
 		ff <- ff[!grepl(".json$", ff)]
-		ff <- ff[ff != "ok.txt"]
+		ff <- ff[basename(ff) != "ok.txt"]
 		return(ff)
 	}
 	zipf0 <- file.path(path, paste0(uname, ".zip"))
