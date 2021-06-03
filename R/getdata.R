@@ -4,10 +4,6 @@
 # license GPL3
 
 
-.getdomain <- function(x) strsplit(gsub("http://|https://|www\\.", "", x), "/")[[c(1, 1)]]
-.getprotocol <- function(x) paste0(strsplit(x, "/")[[c(1, 1)]], "//")
-.removeprotocol <- function(x) gsub("http://|https://|www\\.", "", x)
-
 get_simple_URI <- function(uri, reverse=FALSE) {
 
 	if (reverse) {
@@ -127,6 +123,10 @@ get_simple_URI <- function(uri, reverse=FALSE) {
 	pid <- unlist(strsplit(u, "dataset/"))[2]
 	uu <- paste0(baseu, "/api/3/action/package_show?id=", pid)
 	y  <- httr::GET(uu)
+	if (y$status_code != 200) {
+		return(NULL)
+	}
+
 	ry <- httr::content(y, as="raw")
 	meta <- rawToChar(ry)
 	writeLines(meta, file.path(path, paste0(uname, ".json")))
@@ -149,6 +149,11 @@ get_simple_URI <- function(uri, reverse=FALSE) {
 	writeLines("ok", file.path(path, "ok.txt"))
 	files
 }
+
+
+.getdomain <- function(x) strsplit(gsub("http://|https://|www\\.", "", x), "/")[[c(1, 1)]]
+.getprotocol <- function(x) paste0(strsplit(x, "/")[[c(1, 1)]], "//")
+.removeprotocol <- function(x) gsub("http://|https://|www\\.", "", x)
 
 
 get_data_from_uri <- function(uri, path, overwrite=FALSE, uripath=TRUE, unzip=TRUE) {
