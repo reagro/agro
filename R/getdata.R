@@ -71,53 +71,6 @@ get_simple_URI <- function(uri, reverse=FALSE) {
 
 
 
-.get_ckan <- function(uri, path, uripath=TRUE, overwrite=FALSE) {
-
-	uname <- get_simple_URI(uri)
-	if (uripath) path <- file.path(path, uname)
-	if (!(overwrite) && (file.exists(file.path(path, "ok.txt")))) return(true)
-	
-	if (grepl("^doi:", uri)) {
-		uri <- gsub("^doi:", "https://dx.doi.org/", uri)
-	} else if (grepl("^hdl:", uri)) {
-		uri <- gsub("^hdl:", "https://hdl.handle.net/", uri)
-	}
-	zipf <- zipf1
-	dir.create(path, FALSE, TRUE)
-	if (!file.exists(path)) {
-		stop(paste("cannot create path:", path))
-	}
-	x <- httr::GET(uri)
-	stopifnot(x$status_code == 200)
-	u <- x$url
-	domain <- .getdomain(u)
-	protocol <- .getprotocol(u)
-	baseu <- paste0(protocol, domain)
-	pid <- unlist(strsplit(u, "dataset/"))[2]
-	uu <- paste0(baseu, "/api/3/action/package_show?id=", pid)
-	y  <- httr::GET(uu)
-	ry <- httr::content(response, as="raw")
-	meta <- rawToChar(ry)
-	js  <- jsonlite::fromJSON(meta)
-	meta <- jsonlite::toJSON(js, pretty=TRUE)
-	writeLines(meta, file.path(path, paste0(uname, ".json")))
-	d <- js$result$resources
-	
-	done <- TRUE
-	for (i in 1:nrow(d)) {
-		u <- file.path("https:/", server, "dataset", d[i,"package_id"], "resource", d[i,"id"], "download", d[i,"name"])
-		#if (d$available[i] == "yes") {
-        ok <- try(download.file(d$url[i], file.path(path, d$name[i]), mode="wb", quiet=TRUE) )
-		if (inherits(ok, "try-error")) {
-			print("cannot download", d$name[i])
-			done <- FALSE
-		}
-	}
-	writeLines("ok", file.path(path, "ok.txt"))
-	return(done)
-}
-
-
 .dataverse_unzip <- function(zipf, path, unzip) {
 	allzf <- NULL
 	for (z in zipf) {
@@ -223,7 +176,7 @@ get_simple_URI <- function(uri, reverse=FALSE) {
 		}
 	}
 	writeLines("ok", file.path(path, "ok.txt"))
-	file.path(path, files)
+	files
 }
 
 
