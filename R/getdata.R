@@ -25,13 +25,13 @@ get_simple_URI <- function(uri, reverse=FALSE) {
 	} else if (grepl("persistentId=hdl:", ur)) {
 		u <- unlist(strsplit(ur, "persistentId=hdl:"))[2]
 		u <- paste0("hdl_", u)
-	} else if (grep("^hdl:", ur)) {
+	} else if (grepl("^hdl:", ur)) {
 		u <- gsub("^hdl:", "hdl_", ur)		
-	} else if (grep("hdl.handle.net/", ur)) {
+	} else if (grepl("hdl.handle.net/", ur)) {
 		u <- gsub("hdl.handle.net/", "", ur)
 		u <- paste0("hdl_", u)
 	} else {
-		stop("???")
+		stop(paste0("Not valid unique object identifier (DOI or HDL)"))
 	}
 	gsub("/", "_", u)
 }
