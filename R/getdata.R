@@ -185,13 +185,13 @@ get_data_from_uri <- function(uri, path, overwrite=FALSE, uripath=TRUE, unzip=TR
 		stop(paste("cannot create path:", path))
 	}
 	x <- httr::GET(uri)
-	stopifnot(x$status_code == 200)
+    stopifnot("Dataset or resource not reachable. Server returned an error message. \n" = x$status_code == 200)
 	u <- x$url
 	domain <- .getdomain(u)
 	protocol <- .getprotocol(u)
 	baseu <- paste0(protocol, domain)
 	if (grepl("/dataset/", u)) {	
-		.download_ckan_files(u, baseu, path, uname)
+        .download_ckan_files(u, baseu, path, uname)
 	} else {
 		.download_dataverse_files(u, baseu, path, uname, domain, protocol, unzip, zipf1)
 	}
