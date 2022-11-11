@@ -4,7 +4,7 @@ Title: Agriculture data science helper functions
 Version: 0.2-2
 Suggests: httr, jsonlite, yaml
 Date: 2021-06-02
-Author: Robert Hijmans
+Author: Robert Hijmans, Eduardo Garcia Bendito
 Maintainer: <r.hijmans@gmail.com>
 Description: An (small and eclectic) collection of methods to support agricultural data science methods. 
 License: GPL (>=3)
