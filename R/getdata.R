@@ -173,6 +173,7 @@ get_simple_URI <- function(uri, reverse=FALSE) {
   } else {
     files <- c(files, outf)
   }
+  unzip(outf, exdir = path)
   writeLines("ok", file.path(path, "ok.txt"))
   files
 }
@@ -219,8 +220,7 @@ get_data_from_uri <- function(uri, path, overwrite=FALSE, uripath=TRUE, unzip=TR
   baseu <- paste0(protocol, domain)
   if (grepl("/stash/", u)) {	
     .download_dryad_files(u, baseu, path, uname)
-  }
-  else if (grepl("/dataset/", u)) {	
+  } else if (grepl("/dataset/", u)) {	
     .download_ckan_files(u, baseu, path, uname)
   } else {
     .download_dataverse_files(u, baseu, path, uname, domain, protocol, unzip, zipf1)
