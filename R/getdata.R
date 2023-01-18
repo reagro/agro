@@ -68,7 +68,9 @@ get_simple_URI <- function(uri, reverse=FALSE) {
   #js <- httr::content(r, as = "text", encoding = "UTF-8")
   # but for cimmyt...
   tmpf <- tempfile()
-  utils::download.file(uu, tmpf, quiet=TRUE)
+  # temporary fix because WorldAgroFor https cert has expired
+  utils::download.file(uu, tmpf, quiet=TRUE, method="curl", extra="-k")
+  # utils::download.file(uu, tmpf, quiet=TRUE)
   js <- readLines(tmpf, encoding = "UTF-8", warn=FALSE)
   js <- jsonlite::fromJSON(js)
   fjs <- js$data$latestVersion$files
@@ -95,7 +97,9 @@ get_simple_URI <- function(uri, reverse=FALSE) {
   if (sum(f$originalFileSize, na.rm=TRUE) < 10000000) {
     files <- paste0(f$id, collapse = ",")
     fu <- paste0(protocol, domain, "/api/access/datafiles/", files, "?format=original")
-    utils::download.file(fu, zipf, mode="wb", quiet=TRUE)
+  # temporary fix because WorldAgroFor https cert has expired
+	utils::download.file(fu, zipf, quiet=TRUE, mode="wb", method="curl", extra="-k")
+	# utils::download.file(fu, zipf, mode="wb", quiet=TRUE)
   } else {
     f$originalFileSize[is.na(f$originalFileSize)] <- 0
     i <- 1
@@ -108,7 +112,9 @@ get_simple_URI <- function(uri, reverse=FALSE) {
       files <- paste0(f$id[k], collapse = ",")
       fu <- paste0(protocol, domain, "/api/access/datafiles/", files, "?format=original")
       zipi <- file.path(path, paste0(uname, "_", i, ".zip"))
-      utils::download.file(fu, zipi, mode="wb", quiet=TRUE)
+#      utils::download.file(fu, zipi, mode="wb", quiet=TRUE)
+# temporary fix because WorldAgroFor https cert has expired
+	  utils::download.file(fu, zipf, quiet=TRUE, mode="wb", method="curl", extra="-k")
       f <- f[-k,]
       zipf <- c(zipf, zipi)
       if (nrow(f) == 0) break
@@ -212,6 +218,10 @@ get_data_from_uri <- function(uri, path, overwrite=FALSE, uripath=TRUE, unzip=TR
   if (!file.exists(path)) {
     stop(paste("cannot create path:", path))
   }
+  
+  # temporary fix because WorldAgroFor https cert has expired
+  httr::set_config(httr::config(ssl_verifypeer = 0L))
+
   x <- httr::GET(uri)
   stopifnot("Dataset or resource not reachable. Server returned an error message. \n" = x$status_code == 200)
   u <- x$url
